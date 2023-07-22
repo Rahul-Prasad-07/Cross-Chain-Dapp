@@ -1,27 +1,33 @@
+// We require the Hardhat Runtime Environment explicitly here. This is optional
+// but useful for running the script in a standalone fashion through `node <script>`.
+//
+// You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
+// will compile your contracts, add the Hardhat Runtime Environment's members to the
+// global scope, and execute the script.
 const hre = require("hardhat");
 
 async function main() {
   const SendMessage = await hre.ethers.getContractFactory("SendMessage");
-  const sendMessage = await SendMessage.deploy("", "");
+  const sendMessage = await SendMessage.deploy(
+    "0x4D147dCb984e6affEEC47e44293DA442580A3Ec0",
+    "0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6"
+  );
+
+  //deploy on bsc testnet
+  //"0x4D147dCb984e6affEEC47e44293DA442580A3Ec0",
+  //"0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6"
+  // deploy on avanalanche
+  //"0xC249632c2D40b9001FE907806902f63038B737Ab",
+  //"0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6"
 
   await sendMessage.deployed();
-  console.log("SendMessage deployed to:", sendMessage.address);
+
+  console.log(`SendMessage contract deployed to ${sendMessage.address}`);
 }
 
-// handle errors
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
 main().catch((error) => {
-  console.log(error);
+  console.error(error);
   process.exitCode = 1;
 });
-
-/**
- * In the code snippet above:
-
-The main function has the SendMessage contract factory obtained using hre.ethers.getContractFactory.
-
-The sendMessage contract is deployed using the SendMessage.deploy method with two strings as arguments.
-
-await sendMessage.deployed() statement ensures that the deployment is completed before moving forward.
-
-The deployed contract's address is logged into the console.
- */
