@@ -14,4 +14,5 @@ npx hardhat run scripts/deploy.js
 
 Bsc : SendMessage contract deployed to 0xc1f16766a0e56211F1d882DdC07d0F283aDdC921
 
-Ava
+polygon_mumbai : npx hardhat run scripts/deploy.js --network polygon_mumbai
+SendMessage contract deployed to 0xc1f16766a0e56211F1d882DdC07d0F283aDdC921
