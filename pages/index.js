@@ -10,13 +10,59 @@ import { ethers } from "ethers";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const BSC_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_BSC_CONTRACT_ADDRESS;
+const MUMBAI_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_MUMBAI_CONTRACT_ADDRESS;
+const MUMBAI_RPC_URL = process.env.NEXT_PUBLIC_MUMBAI_RPC_URL;
+
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
+  const [message, setMessage] = useState("");
+  const [sourceChain, setSourceChain] = useState("");
+
+  const { config } = usePrepareContractWrite({
+    // Calling a hook to prepare the contract write configuration
+    address: BSC_CONTRACT_ADDRESS, // Address of the BSC contract
+    abi: SendMessageContract.abi, // ABI (Application Binary Interface) of the contract
+    functionName: "sendMessage", // Name of the function to call on the contract
+    args: ["polygon_mumbai", MUMBAI_CONTRACT_ADDRESS, message], // Arguments to pass to the contract function
+    value: ethers.utils.parseEther("0.01"), // Value to send along with the contract call for gas fee
+  });
+
+  const { data: useContractWriteData, write } = useContractWrite(config);
+
+  const { data: useWaitForTransactionData, isSuccess } = useWaitForTransaction({
+    hash: useContractWriteData?.hash, // Hash of the transaction obtained from the contract write data
+  });
+
+  const handleSendMessage = () => {
+    write(); // Initiating the contract call
+
+    toast.info("Sending message...", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+    });
+  };
 
   useEffect(() => {
     const body = document.querySelector("body");
     darkMode ? body.classList.add("dark") : body.classList.remove("dark");
-  }, [darkMode]);
+
+    isSuccess
+      ? toast.success("Message sent!", {
+          position: "top-right",
+          autoClose: 7000,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+        })
+      : useWaitForTransactionData?.error || useContractWriteData?.error
+      ? toast.error("Error sending message")
+      : null;
+  }, [darkMode, useContractWriteData, useWaitForTransactionData]);
 
   const handleToggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -85,8 +131,12 @@ export default function Home() {
               type="text"
               placeholder="Message"
               className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+              onChange={(e) => setMessage(e.target.value)}
             />
-            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-full">
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-full"
+              onClick={() => handleSendMessage()}
+            >
               Send
             </button>
           </div>
@@ -122,7 +172,7 @@ export default function Home() {
       <ToastContainer />
       <footer className="flex justify-center items-center py-8 border-t border-gray-300">
         <a
-          href="https://github.com/Olanetsoft/fullstack-interchain-dapp"
+          href="https://github.com/Rahul-Prasad-07/Cross-Chain-Dapp/tree/main"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center font-bold text-blue-500 text-lg"
