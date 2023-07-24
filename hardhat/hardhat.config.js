@@ -27,8 +27,8 @@ module.exports = {
       accounts: [PRIVATE_KEY],
     },
     polygon_mumbai: {
-      url: "https://rpc-mumbai.maticvigil.com",
-      chainId: 80001,
+      url: "https://avalanche-fuji-c-chain.publicnode.com",
+      chainId: 43113,
       accounts: [PRIVATE_KEY],
     },
   },

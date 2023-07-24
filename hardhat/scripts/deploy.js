@@ -14,8 +14,8 @@ async function main() {
   // "0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6"
 
   const sendMessage = await SendMessage.deploy(
-    "0xBF62ef1486468a6bd26Dd669C06db43dEd5B849B",
-    "0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6" // mumbai testnet
+    "0xC249632c2D40b9001FE907806902f63038B737Ab",
+    "0xbE406F0189A0B4cf3A05C286473D23791Dd44Cc6" // avalanche fuji testnet
   );
 
   await sendMessage.deployed();

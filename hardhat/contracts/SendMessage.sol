@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // SPDX license identifier specifies which open-source license is being used for the contract
-pragma solidity 0.8.9;
+pragma solidity ^0.8.9;
 
 // Importing external contracts for dependencies
 import { AxelarExecutable } from '@axelar-network/axelar-gmp-sdk-solidity/contracts/executable/AxelarExecutable.sol';
